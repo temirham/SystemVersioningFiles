@@ -45,5 +45,13 @@
   cursor: pointer;
 }
 
+.Card-File{
+  border: 2px dashed #ccc;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  margin-left: 30px;
+}
+
 
 

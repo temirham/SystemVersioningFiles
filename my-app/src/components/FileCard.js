@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Button, Avatar, Card, CardContent, Typography, CardActions} from '@mui/material';
-import { uploadFile } from '/Users/temirhanmamaev/Documents/test_front/my-app/src/store/fileSlice.js'; // Импортируйте действие
-
+import { uploadFile } from '/Users/temirhanmamaev/Documents/test_front/my-app/src/store/fileSlice.js';
 import { Icon } from '@iconify/react';
 import DeleteIcon from '@mui/icons-material/Menu';
 import fileIcon from '@iconify-icons/fa-regular/file';
@@ -11,7 +10,6 @@ import filePdf from '@iconify-icons/fa-regular/file-pdf';
 import fileWord from '@iconify-icons/fa-regular/file-word';
 import fileExcl from '@iconify-icons/fa-regular/file-excel';
 import filePpt from '@iconify-icons/fa-regular/file-powerpoint';
-
 
 function getFileIcon(extension) {
     switch (extension.toLowerCase()) {
@@ -40,12 +38,10 @@ function getFileIcon(extension) {
     }
   }
 
-function FileCard({ file }) {
+function FileCard({ file, selectedMenu}) {
   const [selectedFile, setSelectedFile] = useState(null);
   const dispatch = useDispatch();
-  const files = useSelector((state) => state.fileVersions.files);
-//   const userId = useSelector((state) => state.user.userId);
-  const userId = 2; // Предположим, что у вас есть редюсер для пользователей с userId
+  const userId = 2;
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
@@ -56,16 +52,27 @@ function FileCard({ file }) {
       dispatch(uploadFile({ file: selectedFile, userId }));
     }
   };
-  const handleDeleteFile = (fileToDelete) => {
-      const updatedFiles = files.filter((file) => file !== fileToDelete);
-    //   setFiles(updatedFiles);
-      if (updatedFiles) {
-        dispatch(uploadFile({ file: updatedFiles, userId }));
-      }
+  const isFileTypeMatch = (file, fileType) => {
+    const fileExtension = file.name.split('.').pop().toLowerCase();
+    switch (fileType) {
+      case 'documents':
+        return ['pdf', 'word', 'doc', 'docx'].includes(fileExtension);
+      case 'image':
+        return ['jpg', 'jpeg', 'png', 'gif'].includes(fileExtension);
+      case 'recent':
+        return !['pdf', 'word', 'doc', 'docx', 'jpg', 'jpeg', 'png', 'gif'].includes(fileExtension);
+      default:
+        return true; // Показываем все остальные файлы для 'recent' и 'mydrive'
+    }
   };
 
+  // Проверяем, соответствует ли файл выбору пользователя
+  if (!isFileTypeMatch(file, selectedMenu)) {
+    return null; // Не отображаем файлы, которые не соответствуют выбору
+  }
+
   return (
-    <Card variant="outlined">
+    <Card variant="outlined" style={{ marginLeft: '10px', marginBottom: '10px'}}>
         <CardContent>
             <Avatar>{getFileIcon(file.name.split('.').pop())}</Avatar>
             <Typography variant="subtitle1">{file.name}</Typography>
@@ -75,12 +82,11 @@ function FileCard({ file }) {
                 variant="contained"
                 color="secondary"
                 startIcon={<DeleteIcon />}
-                onClick={() => handleDeleteFile(file)}
             >
                 Delete
             </Button>
             <Button variant="contained" color="primary" onClick={handleUpload}>
-                Upload File
+                Download
             </Button>
         </CardActions>
     </Card>

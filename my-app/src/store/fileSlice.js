@@ -22,6 +22,7 @@ export const getUserFile = createAsyncThunk(
       },
     };
     const response = await axios.get(`${IP4}file/${userId}`, requestOptions);
+    //const response = await axios.get(`https://650a3278f6553137159c7e12.mockapi.io/uploadFile`, requestOptions);
     return response.data.data
   }
 );
@@ -31,7 +32,7 @@ export const addFile = createAsyncThunk(
   'file/addFile',
   async (file) => {
     return await fetchJSON(
-      `${IP4}fileVersions`,
+      `${IP4}`,
       {
         method: 'POST',
         headers: {
@@ -40,7 +41,7 @@ export const addFile = createAsyncThunk(
         },
         body: JSON.stringify({
           user: file.user,
-          fileName: file.fileName,
+          name: file.name,
           version: file.version,
           content: file.content,
         })
@@ -84,7 +85,7 @@ export const editFile = createAsyncThunk(
           newFileName: file.newFileName,
           version: file.version,
           content: file.content,
-          fileName: file.fileName,
+          name: file.name,
           date: file.date,
         })
       }
@@ -106,7 +107,7 @@ export const deleteFile = createAsyncThunk(
         },
         body: JSON.stringify({
           user: file.user,
-          fileName: file.fileName,
+          name: file.name,
         })
       }
     );
