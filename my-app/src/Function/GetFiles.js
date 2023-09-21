@@ -4,7 +4,7 @@ import {useDispatch} from "react-redux";
 import { setFile } from "../store/fileSlice";
 
 
-export function GetFiles() {
+export async function GetFiles() {
     const dispatch = useDispatch()
     async function fetchData() {
         const response = await axios.get('https://650a3278f6553137159c7e12.mockapi.io/uploadFile') // получение данных с API
@@ -14,3 +14,4 @@ export function GetFiles() {
         fetchData()
     }, [])
 }
+

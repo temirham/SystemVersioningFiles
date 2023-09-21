@@ -3,7 +3,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Input, Paper
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile'; // Импортируем иконку файла
 
-import { addFile, setCurrentFile, setFile} from '/Users/temirhanmamaev/Documents/test_front/my-app/src/store/fileSlice.js';
+import { addFile, setCurrentFile, setFile, loadFiles} from '/Users/temirhanmamaev/Documents/test_front/my-app/src/store/fileSlice.js';
 
 import {useDispatch, useSelector} from "react-redux";
 
@@ -21,6 +21,7 @@ function FileUploader({ onFileUpload }) {
 
   const closeDialog = () => {
     setDialogOpen(false);
+    setSelectedFile(null);
   };
 
   const handleFileChange = (e) => {
@@ -30,14 +31,10 @@ function FileUploader({ onFileUpload }) {
 
   const handleUpload = () => {
     if (selectedFile) {
-        // dispatch(setCurrentFile({ 
-        //     file: selectedFile.name, 
-        //     version: 0,
-        //     path: selectedFile.name,
-        //     date: selectedFile.lastModified, 
-        // }));
         dispatch(addFile(selectedFile))
-        closeDialog();
+        dispatch(loadFiles());
+        dispatch(loadFiles());
+        closeDialog()
       }
   };
 

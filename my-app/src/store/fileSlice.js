@@ -11,18 +11,28 @@ async function fetchJSON(url, options) {
     return response.json();
 }
 
+export const loadFiles = () => async (dispatch) => {
+    try {
+      const response = await axios.get(`https://650a3278f6553137159c7e12.mockapi.io/uploadFile`); // Загрузите файлы с сервера
+      dispatch(setFile(response.data)); // Обновите состояние с файлами
+    } catch (error) {
+      // Обработка ошибок
+    }
+  };
+
 // Замените Note на FileVersion
 export const getUserFile = createAsyncThunk(
   'file/getUserFile',
-  async (userId) => {
-    const requestOptions = {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
-      },
-    };
-    const response = await axios.get(`${IP4}file/${userId}`, requestOptions);
-    //const response = await axios.get(`https://650a3278f6553137159c7e12.mockapi.io/uploadFile`, requestOptions);
+  //async (userId) => {
+  async () => {
+    // const requestOptions = {
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+    //   },
+    // };
+    // const response = await axios.get(`${IP4}file/${userId}`, requestOptions);
+    const response = await axios.get(`https://650a3278f6553137159c7e12.mockapi.io/uploadFile`);
     return response.data.data
   }
 );
@@ -117,7 +127,7 @@ export const deleteFile = createAsyncThunk(
 export const fileSlice = createSlice({
   name: "fileSlice",
   initialState: {
-    files: [], // Замените notes на fileVersions
+    files: [],
     fileStatus: '',
     currentFile: {
       fileName: '',

@@ -1,13 +1,5 @@
 import React, { useState, useEffect} from 'react';
 import FileUploader from './FileUploader';
-// import AuthDialog from './AuthDialog';
-// import { Icon } from '@iconify/react';
-// import fileIcon from '@iconify-icons/fa-regular/file';
-// import fileImage from '@iconify-icons/fa-solid/file-image';
-// import filePdf from '@iconify-icons/fa-regular/file-pdf';
-// import fileWord from '@iconify-icons/fa-regular/file-word';
-// import fileExcl from '@iconify-icons/fa-regular/file-excel';
-// import filePpt from '@iconify-icons/fa-regular/file-powerpoint';
 import {useDispatch, useSelector} from "react-redux";
 import FileCard from './FileCard'; // Импортируйте компонент FileCard
 import { uploadFile } from '/Users/temirhanmamaev/Documents/test_front/my-app/src/store/fileSlice.js';
@@ -33,43 +25,13 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import FolderIcon from '@mui/icons-material/Folder';
 import MenuIcon from '@mui/icons-material/Menu';
 import {getUser, refreshUser} from "../store/UserSlice";
-import { addFile, getUserFile } from '../store/fileSlice';
-import { GetFiles } from '../Hooks/GetFiles';
+import { addFile, getUserFile, loadFiles } from '../store/fileSlice';
+import { GetFiles } from '/Users/temirhanmamaev/Documents/test_front/my-app/src/Function/GetFiles.js';
 
-// function getFileIcon(extension) {
-//     switch (extension.toLowerCase()) {
-//       case 'jpg':
-//         return <Icon icon={fileImage} />;
-//       case 'docx':
-//         return <Icon icon={fileWord}/>;
-//       case 'xlsx':
-//         return <Icon icon={fileExcl}/>;
-//       case 'doc':
-//         return <Icon icon={fileWord}/>;
-//       case 'word':
-//         return <Icon icon={fileWord}/>;
-//       case 'pptx':
-//         return <Icon icon={filePpt}/>;
-//       case 'jpeg':
-//         return <Icon icon={fileImage} />;
-//       case 'png':
-//         return <Icon icon={fileImage} />;
-//       case 'gif':
-//         return <Icon icon={fileImage} />;
-//       case 'pdf':
-//         return <Icon icon={filePdf} />;
-//       default:
-//         return <Icon icon={fileIcon} />;
-//     }
-//   }
+
   
 
 function FileManager() {
-//   const [files, setFiles] = useState([]);
-//   const [folders, setFolders] = useState([]);
-//   const [newFolderName, setNewFolderName] = useState('');
-// //   const [isAddingFolder, setIsAddingFolder] = useState(false);
-  getUserFile(3)
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   const [selectedMenu, setSelectedMenu] = useState('mydrive'); // Начальное значение выбора
 
@@ -77,56 +39,22 @@ function FileManager() {
     setSelectedMenu(menu);
   };
   const dispatch = useDispatch();
-  GetFiles()
+//   dispatch(loadFiles());
   const {userId} = useSelector((state) => state.userId);
   const {username} = useSelector((state) => state.username);
   const {files} = useSelector((state) => state.files); // Замените на ваш собственный селектор для списка файлов
   useEffect(() => {
     const fetchData = async () => {
-        await dispatch(refreshUser())
-            .then(async ()=>{
-                await dispatch(getUser())
-                .then(async()=>{
-                    await dispatch(getUserFile())
-                })
-                
-            })
+        await dispatch(loadFiles());
     }
     fetchData()
   }, [])
+//   GetFiles()
   const handleFileUpload = (selectedFile) => {
     if (selectedFile) {
         dispatch(uploadFile({ file: selectedFile, userId }));
       }
   };
-
-//   const handleAdd=async ()=>{
-//     let updatedCurrentNote={title:`new_note`, content:'', date:'', user:username}
-
-//     await dispatch(refreshUser())
-//         .then(async()=>{
-//             await dispatch(addFileVersion(updatedCurrentNote))
-//                 .then(async ()=>{
-//                     await dispatch(getUserFileVersions(userId))
-//                 })
-//             await dispatch(getUserFileVersions(userId))
-//                 .then((res)=>{console.log(res)})
-//         })
-
-//   }
-
-//   const handleDeleteFile = (fileToDelete) => {
-//     const updatedFiles = files.filter((file) => file !== fileToDelete);
-//     setFiles(updatedFiles);
-//   };
-
-//   const handleCreateFolder = () => {
-//     if (newFolderName.trim() !== '') {
-//       setFolders([...folders, newFolderName]);
-//       setNewFolderName('');
-//       setIsAddingFolder(false);
-//     }
-//   };
 
   return (
     <Container style={{alignContent: 'center', marginLeft: 'auto', marginRight: 'auto', marginTop: 'auto'}}>
@@ -202,7 +130,7 @@ function FileManager() {
               </List>
               <Divider />
               <div align="center">
-                <FileUploader onFileUpload={handleFileUpload} />
+                <FileUploader userId={userId} onFileUpload={handleFileUpload} />
               </div>
             </div>
           </Drawer>
