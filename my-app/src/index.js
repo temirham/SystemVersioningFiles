@@ -14,14 +14,14 @@ const theme = createTheme({
 });
 
 ReactDOM.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <Provider store={store}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <App />
       </ThemeProvider>
-    </Provider>
+    </Provider>,
     
-  </React.StrictMode>,
+  // </React.StrictMode>,
   document.getElementById('root')
 );

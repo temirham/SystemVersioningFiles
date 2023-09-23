@@ -7,9 +7,25 @@ import { addFile, setCurrentFile, setFile, loadFiles} from '/Users/temirhanmamae
 
 import {useDispatch, useSelector} from "react-redux";
 
+function countFileRepetitions(files, fileName) {
+  let maxVersion = 0;
+
+  files.forEach((file) => {
+    if (file.name === fileName && file.version > maxVersion) {
+      maxVersion = file.version;
+    }
+  });
+
+  return maxVersion;
+}
+
+
+
+
 function FileUploader({ onFileUpload }) {
   const [selectedFile, setSelectedFile] = useState(null);
   const [isDialogOpen, setDialogOpen] = useState(false);
+  const {files} = useSelector((state) => state.files); 
   const dispatch = useDispatch();
 //   const {userId} = useSelector((state) => state.userId);
   const userId = 3;
@@ -31,7 +47,10 @@ function FileUploader({ onFileUpload }) {
 
   const handleUpload = () => {
     if (selectedFile) {
-        dispatch(addFile(selectedFile))
+        const repetitions = countFileRepetitions(files, selectedFile.name);
+        selectedFile.version = repetitions + 1;
+        console.log(selectedFile.version);
+        dispatch(addFile(selectedFile, repetitions));
         dispatch(loadFiles());
         dispatch(loadFiles());
         closeDialog()
@@ -65,16 +84,16 @@ function FileUploader({ onFileUpload }) {
               textAlign: 'center',
               cursor: 'pointer',
               minWidth: '500px',
-              minHeight: '300px' // Увеличиваем минимальную ширину
+              minHeight: '300px' 
             }}
           >
             {selectedFile ? (
               <div>
                 <InsertDriveFileIcon
                   style={{
-                    fontSize: '72px', // Устанавливаем размер иконки
-                    color: 'gray', // Устанавливаем серый цвет для иконки
-                    marginBottom: '20px', // Отступ снизу от иконки
+                    fontSize: '72px', 
+                    color: 'gray', 
+                    marginBottom: '20px', 
                   }}
                 />
                 <Typography variant="h6">Выберите файл:</Typography>

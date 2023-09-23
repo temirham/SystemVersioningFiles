@@ -1,57 +1,101 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { Button, Avatar, Card, CardContent, Typography, CardActions} from '@mui/material';
-import { uploadFile } from '/Users/temirhanmamaev/Documents/test_front/my-app/src/store/fileSlice.js';
+import { useSelector } from 'react-redux';
+import { Typography, Menu, MenuItem, Dialog, DialogTitle, DialogContent, List, ListItem, ListItemText } from '@mui/material';
 import { Icon } from '@iconify/react';
-import DeleteIcon from '@mui/icons-material/Menu';
 import fileIcon from '@iconify-icons/fa-regular/file';
 import fileImage from '@iconify-icons/fa-solid/file-image';
 import filePdf from '@iconify-icons/fa-regular/file-pdf';
 import fileWord from '@iconify-icons/fa-regular/file-word';
 import fileExcl from '@iconify-icons/fa-regular/file-excel';
 import filePpt from '@iconify-icons/fa-regular/file-powerpoint';
+import { deleteFile, loadFiles } from '/Users/temirhanmamaev/Documents/test_front/my-app/src/store/fileSlice.js';
+import { useDispatch } from "react-redux";
 
 function getFileIcon(extension) {
-    switch (extension.toLowerCase()) {
-      case 'jpg':
-        return <Icon icon={fileImage} />;
-      case 'docx':
-        return <Icon icon={fileWord}/>;
-      case 'xlsx':
-        return <Icon icon={fileExcl}/>;
-      case 'doc':
-        return <Icon icon={fileWord}/>;
-      case 'word':
-        return <Icon icon={fileWord}/>;
-      case 'pptx':
-        return <Icon icon={filePpt}/>;
-      case 'jpeg':
-        return <Icon icon={fileImage} />;
-      case 'png':
-        return <Icon icon={fileImage} />;
-      case 'gif':
-        return <Icon icon={fileImage} />;
-      case 'pdf':
-        return <Icon icon={filePdf} />;
-      default:
-        return <Icon icon={fileIcon} />;
-    }
+  switch (extension.toLowerCase()) {
+    case 'jpg':
+      return <Icon icon={fileImage} />;
+    case 'docx':
+      return <Icon icon={fileWord} />;
+    case 'xlsx':
+      return <Icon icon={fileExcl} />;
+    case 'doc':
+      return <Icon icon={fileWord} />;
+    case 'word':
+      return <Icon icon={fileWord} />;
+    case 'pptx':
+      return <Icon icon={filePpt} />;
+    case 'jpeg':
+      return <Icon icon={fileImage} />;
+    case 'png':
+      return <Icon icon={fileImage} />;
+    case 'gif':
+      return <Icon icon={fileImage} />;
+    case 'pdf':
+      return <Icon icon={filePdf} />;
+    default:
+      return <Icon icon={fileIcon} />;
   }
+}
 
-function FileCard({ file, selectedMenu}) {
-  const [selectedFile, setSelectedFile] = useState(null);
+function FileCard({ file, selectedMenu }) {
+  const [contextMenuAnchor, setContextMenuAnchor] = useState(null);
+  const [contextMenuAnchor1, setContextMenuAnchor1] = useState(null);
+  const [selectedVersionFile, setSelectedVersionFile] = useState(null);
   const dispatch = useDispatch();
-  const userId = 2;
+  const { files } = useSelector((state) => state.files);
+  const [isVersionsDialogOpen, setVersionsDialogOpen] = useState(false);
 
-  const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
+  const openVersionsDialog = () => {
+    handleCloseContextMenu();
+    setVersionsDialogOpen(true);
   };
 
-  const handleUpload = () => {
-    if (selectedFile) {
-      dispatch(uploadFile({ file: selectedFile, userId }));
-    }
+  const closeVersionsDialog = () => {
+    setVersionsDialogOpen(false);
   };
+
+  const handleContextMenu = (event) => {
+    event.preventDefault();
+    setContextMenuAnchor(event.currentTarget);
+  };
+
+  const handleContextMenu1 = (event, versionFile) => {
+    event.preventDefault();
+    setContextMenuAnchor1(event.currentTarget);
+    setSelectedVersionFile(versionFile);
+  };
+
+  const handleCloseContextMenu = () => {
+    setContextMenuAnchor(null);
+  };
+
+  const handleCloseContextMenu1 = () => {
+    setContextMenuAnchor1(null);
+  };
+
+  const handleDeleteVersion = (versionFile) => {
+    dispatch(deleteFile(versionFile));
+    dispatch(loadFiles());
+    dispatch(loadFiles());
+    handleCloseContextMenu1();
+  };
+
+  const handleDeleteFile = () => {
+    const allVersionsToDelete = [file, ...files.filter((f) => f.name === file.name)];
+    allVersionsToDelete.forEach((versionFile) => {
+      dispatch(deleteFile(versionFile));
+    });
+    dispatch(loadFiles());
+    dispatch(loadFiles());
+    handleCloseContextMenu();
+  };
+
+  const handleDownloadFile = () => {
+    // ...
+    handleCloseContextMenu();
+  };
+
   const isFileTypeMatch = (file, fileType) => {
     const fileExtension = file.name.split('.').pop().toLowerCase();
     switch (fileType) {
@@ -62,34 +106,63 @@ function FileCard({ file, selectedMenu}) {
       case 'recent':
         return !['pdf', 'word', 'doc', 'docx', 'jpg', 'jpeg', 'png', 'gif'].includes(fileExtension);
       default:
-        return true; // Показываем все остальные файлы для 'recent' и 'mydrive'
+        return true;
     }
   };
 
-  // Проверяем, соответствует ли файл выбору пользователя
-  if (!isFileTypeMatch(file, selectedMenu)) {
-    return null; // Не отображаем файлы, которые не соответствуют выбору
+  if (!file || !isFileTypeMatch(file, selectedMenu)) {
+    return null;
   }
 
   return (
-    <Card variant="outlined" style={{ marginLeft: '10px', marginBottom: '10px'}}>
-        <CardContent>
-            <Avatar>{getFileIcon(file.name.split('.').pop())}</Avatar>
-            <Typography variant="subtitle1">{file.name}</Typography>
-        </CardContent>
-        <CardActions>
-            <Button
-                variant="contained"
-                color="secondary"
-                startIcon={<DeleteIcon />}
-            >
-                Delete
-            </Button>
-            <Button variant="contained" color="primary" onClick={handleUpload}>
-                Download
-            </Button>
-        </CardActions>
-    </Card>
+    <div style={{ marginLeft: '15px', marginRight: '15px', width: '6em' }}
+    >
+      <div
+        style={{ fontSize: '60px', cursor: 'pointer' }}
+        onContextMenu={handleContextMenu}
+      >
+        {getFileIcon(file.name.split('.').pop())}
+      </div>
+      <div >
+        <Typography variant="subtitle3" style={{ fontSize: '13px' }}>{file.name}</Typography>
+        <Typography variant="subtitle1">version: {file.version}</Typography>
+      </div>
+      <Menu
+        anchorEl={contextMenuAnchor}
+        open={Boolean(contextMenuAnchor)}
+        onClose={handleCloseContextMenu}
+      >
+        <MenuItem onClick={handleDeleteFile}>Удалить</MenuItem>
+        <MenuItem onClick={handleDownloadFile}>Скачать</MenuItem>
+        <MenuItem onClick={openVersionsDialog}>Показать все версии файла</MenuItem>
+      </Menu>
+      <Dialog open={isVersionsDialogOpen} onClose={closeVersionsDialog}>
+        <DialogTitle>Версии файла: {file.name}</DialogTitle>
+        <DialogContent>
+          <List>
+            {files
+              .filter((f) => f.name === file.name)
+              .map((versionFile, index) => (
+                <ListItem key={index}>
+                  <ListItemText
+                    style={{ cursor: 'pointer' }}
+                    onContextMenu={(event) => handleContextMenu1(event, versionFile)}
+                    primary={`Версия ${versionFile.version}`}
+                  />
+                  <Menu
+                    anchorEl={contextMenuAnchor1}
+                    open={Boolean(contextMenuAnchor1) && versionFile === selectedVersionFile}
+                    onClose={handleCloseContextMenu1}
+                  >
+                    <MenuItem onClick={() => handleDeleteVersion(versionFile)}>Удалить</MenuItem>
+                    <MenuItem onClick={handleDownloadFile}>Скачать</MenuItem>
+                  </Menu>
+                </ListItem>
+              ))}
+          </List>
+        </DialogContent>
+      </Dialog>
+    </div>
   );
 }
 

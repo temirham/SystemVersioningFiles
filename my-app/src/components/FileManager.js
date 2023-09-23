@@ -1,9 +1,9 @@
 import React, { useState, useEffect} from 'react';
 import FileUploader from './FileUploader';
 import {useDispatch, useSelector} from "react-redux";
-import FileCard from './FileCard'; // Импортируйте компонент FileCard
+import FileCard from './FileCard';
 import { uploadFile } from '/Users/temirhanmamaev/Documents/test_front/my-app/src/store/fileSlice.js';
- 
+import TextField from '@mui/material/TextField';
 import {
   Button,
   Typography,
@@ -24,16 +24,19 @@ import ImageIcon from '@mui/icons-material/Image';
 import DescriptionIcon from '@mui/icons-material/Description';
 import FolderIcon from '@mui/icons-material/Folder';
 import MenuIcon from '@mui/icons-material/Menu';
-import {getUser, refreshUser} from "../store/UserSlice";
-import { addFile, getUserFile, loadFiles } from '../store/fileSlice';
-import { GetFiles } from '/Users/temirhanmamaev/Documents/test_front/my-app/src/Function/GetFiles.js';
+import { loadFiles } from '../store/fileSlice';
 
 
   
 
 function FileManager() {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
-  const [selectedMenu, setSelectedMenu] = useState('mydrive'); // Начальное значение выбора
+  const [selectedMenu, setSelectedMenu] = useState('mydrive'); 
+  const [searchText, setSearchText] = useState('');
+
+
+  
+
 
   const handleMenuClick = (menu) => {
     setSelectedMenu(menu);
@@ -42,19 +45,37 @@ function FileManager() {
 //   dispatch(loadFiles());
   const {userId} = useSelector((state) => state.userId);
   const {username} = useSelector((state) => state.username);
-  const {files} = useSelector((state) => state.files); // Замените на ваш собственный селектор для списка файлов
+  const {files} = useSelector((state) => state.files); 
+
+  
   useEffect(() => {
     const fetchData = async () => {
         await dispatch(loadFiles());
     }
     fetchData()
   }, [])
-//   GetFiles()
   const handleFileUpload = (selectedFile) => {
     if (selectedFile) {
         dispatch(uploadFile({ file: selectedFile, userId }));
       }
   };
+  const filterFiles = () => {
+    const filteredFiles = files.reduce((result, currentFile) => {
+      const existingFile = result.find((file) => file.name === currentFile.name);
+      if (!existingFile || existingFile.version < currentFile.version) {
+        return [...result.filter((file) => file.name !== currentFile.name), currentFile];
+      }
+      return result;
+    }, []);
+  
+    return filteredFiles.filter((file) => {
+      return file.name.toLowerCase().includes(searchText.toLowerCase());
+    });
+  };
+  const handleSearchChange = (event) => {
+    setSearchText(event.target.value);
+  };
+  
 
   return (
     <Container style={{alignContent: 'center', marginLeft: 'auto', marginRight: 'auto', marginTop: 'auto'}}>
@@ -138,11 +159,11 @@ function FileManager() {
         <Grid item xs={12} md={10}>
           <AppBar position="static" color="default">
             <Toolbar>
-              <Grid item xs={12} sm={6} md={4}>
-                <Typography variant="h6" color="inherit" marginLeft={1} marginTop={1}>
+              <Grid  style={{display: 'flex', justifyContent: 'space-between', width: '100%'}}>
+                <div style={{flexGrow: 1}}>
+                    <Typography variant="h6" color="inherit" marginLeft={1} marginTop={1}>
                     File Manager
                 </Typography>
-                <div>
                   <Button
                     startIcon={<MenuIcon />}
                     onClick={() => setDrawerOpen(true)}
@@ -150,14 +171,22 @@ function FileManager() {
                     Open Menu
                   </Button>
                 </div>
+                <TextField
+                  label="Поиск файлов..."
+                  variant="outlined"
+                  fullWidth
+                  value={searchText}
+                  onChange={handleSearchChange}
+                  style={{width: '300px', marginTop: '10px', zIndex: 1}}
+                />
               </Grid>
             </Toolbar>
           </AppBar>
           <Paper elevation={10} style={{ padding: '20px' }}>
           {!files.length ? <h1>К сожалению, пока ничего не найдено</h1>:
             <Grid container spacing={-2}>
-                {files.map((file, index) => (
-                    <FileCard key={index} file={file} selectedMenu={selectedMenu}/>
+                {filterFiles().map((file, index) => ( // Фильтруем уникальные файлы по имени
+                  <FileCard key={index} file={file} selectedMenu={selectedMenu} />
                 ))}
             </Grid>
             }

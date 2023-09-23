@@ -13,10 +13,9 @@ async function fetchJSON(url, options) {
 
 export const loadFiles = () => async (dispatch) => {
     try {
-      const response = await axios.get(`https://650a3278f6553137159c7e12.mockapi.io/uploadFile`); // Загрузите файлы с сервера
-      dispatch(setFile(response.data)); // Обновите состояние с файлами
+      const response = await axios.get(`https://650a3278f6553137159c7e12.mockapi.io/uploadFile`); 
+      dispatch(setFile(response.data)); 
     } catch (error) {
-      // Обработка ошибок
     }
   };
 
@@ -53,7 +52,6 @@ export const addFile = createAsyncThunk(
           user: file.user,
           name: file.name,
           version: file.version,
-          content: file.content,
         })
       }
     );
@@ -108,15 +106,14 @@ export const deleteFile = createAsyncThunk(
   'fileVersions/deleteFileVersion',
   async (file) => {
     return await fetchJSON(
-      `${IP4}fileVersions/delete`,
+      `${IP4}/${file.ID}`,
       {
-        method: 'PUT',
+        method: 'DELETE',
         headers: {
           'Content-Type': 'application/json;charset=utf-8',
           'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
         },
         body: JSON.stringify({
-          user: file.user,
           name: file.name,
         })
       }
