@@ -1,0 +1,12 @@
+Unauthorized: /files_versioning_api/v1/files/download
+"GET /files_versioning_api/v1/files/download HTTP/1.1" 401 47
+Unauthorized: /files_versioning_api/v1/files/download
+"GET /files_versioning_api/v1/files/download HTTP/1.1" 401 47
+Watching for file changes with StatReloader
+D:\Отчеты, презентации, работы\Курсовая работа РИП\Files_Versioning-Backend\Site\settings.py changed, reloading.
+Watching for file changes with StatReloader
+D:\Отчеты, презентации, работы\Курсовая работа РИП\Files_Versioning-Backend\Site\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Unauthorized: /files_versioning_api/v1/files/download
+"GET /files_versioning_api/v1/files/download HTTP/1.1" 401 47
+D:\Отчеты, презентации, работы\Курсовая работа РИП\Files_Versioning-Backend\Site\settings.py changed, reloading.

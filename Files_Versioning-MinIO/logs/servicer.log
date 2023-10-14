@@ -1,0 +1,15 @@
+2023-10-05 21:47:51,033 - INFO - Minio servicer starting.
+2023-10-05 21:47:51,034 - INFO - Minio client starting.
+2023-10-05 21:47:51,040 - INFO - Minio client not started.
+2023-10-05 21:47:51,040 - ERROR - Minio client inactive.
+2023-10-05 21:47:51,040 - INFO - Minio client deleted.
+2023-10-05 21:47:51,040 - INFO - GRPC server not started.
+2023-10-05 21:47:51,040 - INFO - Waiting for termination.
+2023-10-05 21:47:51,040 - ERROR - Servicer init was failed.
+2023-10-05 21:47:51,056 - INFO - GRPC server deleted.
+2023-10-05 21:50:21,548 - INFO - Minio servicer starting.
+2023-10-05 21:50:21,555 - ERROR - Minio client inactive.
+2023-10-05 21:50:21,555 - INFO - GRPC server not started.
+2023-10-05 21:50:21,556 - INFO - Waiting for termination.
+2023-10-05 21:50:21,556 - ERROR - Servicer init was failed.
+2023-10-05 21:50:21,574 - INFO - GRPC server deleted.

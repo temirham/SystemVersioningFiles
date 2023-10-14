@@ -1,0 +1,79 @@
+// Use that to generate .py files:
+// python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. minio.proto
+
+// Imports of minio_pb2.py and minio_pb2_grpc.py should be absolute (from .protos import ...)
+// in current __file__, if you want to import that file (or something from it). Opposite if you want to
+// run that file itself.
+// Also, minio_pb2_grpc.py have minio_pb2 import inside,
+// it should be changed to absolute after generation from .proto with same conditions.
+// If file where minio_pb2_grpc is imported in is going to be used as import anywhere instead
+// of running by itself, the line: "import minio_pb2 as minio__pb2" from minio_pb2_grpc.py
+// should be changed on: "from . import minio_pb2 as minio__pb2". Other way it should be same as before.
+// RUNNING ITSELF FILE WITH  minio_pb2.py and minio_pb2_grpc.py imports BEING IMPORTED ANYWHERE IS IMPOSSIBLE!
+// Or you can just use imports not starting with .
+syntax = "proto3";
+// import "google/protobuf/empty.proto"; f(google.protobuf.Empty) returns{} doesnt work on client.
+package minio_proto;
+
+service MinioMethods {
+    rpc CheckConnection     (EmptyRequest)  returns (Status) {}
+    rpc CheckUser           (User)           returns (Status) {}
+    rpc AddUser             (User)           returns (Status) {}
+    rpc DeleteUser          (User)           returns (Status) {}
+    rpc GetFilesInfoList    (User)           returns (stream FileInfoResponse) {}
+    rpc DownloadFileVersion (FileRequest)    returns (FileResponse) {}
+    rpc AddFileVersion      (FileAddRequest) returns (Status) {}
+    rpc DeleteFileVersion   (FileRequest)    returns (Status) {}
+    rpc DeleteFile          (FileRequest)    returns (Status) {}
+} // delete file gets filename part of version name
+
+// Requests:
+message EmptyRequest {}
+
+message User {
+    string user = 1;
+}
+
+message FileRequest {
+    string user = 1;
+    string name = 2;
+    string version = 3;
+}
+
+message FileAddRequest {
+    string user = 1;
+    string name = 2;
+    string version = 3;
+    bytes  data = 4;
+}
+
+
+// Answers:
+message Status {
+    bool response = 1;
+    bool status = 2;
+    // True - success, False - failure
+    int32 status_code = 3;
+    // 200 ОК, 400 minio, 500 minio servicer error
+    // 401 - minio user not found
+    // 404 - minio file not found
+    // 408 - minio connection
+    // 509 - servicer file or version invalid chars
+}
+
+message FileInfoResponse {
+    string name = 1;
+    string version = 2;
+    string date = 3;
+    Status status = 4;
+}
+
+message FileResponse {
+    bytes data = 1;
+    Status status = 2;
+}
+
+
+
+
+

@@ -1,0 +1,31 @@
+Responses standard:
+
+Any operation except:
+response = {
+    'success'|'error': 'str'
+}
+
+If data applied except of file response:
+response = {
+'data': {}
+}
+
+For file response there is no data,
+its downloading physically in browser.
+
+For file info response data is:
+{
+'name': 'str',
+'version': int
+'date': 'str'
+}
+
+Head codes can be: 200, 400, 403б 405 or 500
+
+Query standard:
+    1. everywhere csrf added except of getting csrf
+
+getting token:
+refreshong token:
+Adding user:
+Deleting user:
