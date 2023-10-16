@@ -25,6 +25,7 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import FolderIcon from '@mui/icons-material/Folder';
 import MenuIcon from '@mui/icons-material/Menu';
 import { loadFiles } from '../store/fileSlice';
+import { refreshUser } from '../store/UserSlice';
 
 
   
@@ -34,31 +35,20 @@ function FileManager() {
   const [selectedMenu, setSelectedMenu] = useState('mydrive'); 
   const [searchText, setSearchText] = useState('');
 
-
-  
-
-
   const handleMenuClick = (menu) => {
     setSelectedMenu(menu);
   };
   const dispatch = useDispatch();
-//   dispatch(loadFiles());
-  const {userId} = useSelector((state) => state.userId);
-  const {username} = useSelector((state) => state.username);
   const {files} = useSelector((state) => state.files); 
 
   
   useEffect(() => {
     const fetchData = async () => {
         await dispatch(loadFiles());
+        await dispatch(refreshUser())
     }
     fetchData()
   }, [])
-  const handleFileUpload = (selectedFile) => {
-    if (selectedFile) {
-        dispatch(uploadFile({ file: selectedFile, userId }));
-      }
-  };
   const filterFiles = () => {
     const filteredFiles = files.reduce((result, currentFile) => {
       const existingFile = result.find((file) => file.name === currentFile.name);
@@ -151,7 +141,7 @@ function FileManager() {
               </List>
               <Divider />
               <div align="center">
-                <FileUploader userId={userId} onFileUpload={handleFileUpload} />
+                <FileUploader />
               </div>
             </div>
           </Drawer>

@@ -8,8 +8,9 @@ import filePdf from '@iconify-icons/fa-regular/file-pdf';
 import fileWord from '@iconify-icons/fa-regular/file-word';
 import fileExcl from '@iconify-icons/fa-regular/file-excel';
 import filePpt from '@iconify-icons/fa-regular/file-powerpoint';
-import { deleteFile, loadFiles } from '/Users/temirhanmamaev/Documents/test_front/my-app/src/store/fileSlice.js';
+import { deleteFile, downloadFile, loadFiles } from '/Users/temirhanmamaev/Documents/test_front/my-app/src/store/fileSlice.js';
 import { useDispatch } from "react-redux";
+import axios from 'axios';
 
 function getFileIcon(extension) {
   switch (extension.toLowerCase()) {
@@ -84,17 +85,43 @@ function FileCard({ file, selectedMenu }) {
   const handleDeleteFile = () => {
     const allVersionsToDelete = [file, ...files.filter((f) => f.name === file.name)];
     allVersionsToDelete.forEach((versionFile) => {
-      dispatch(deleteFile(versionFile));
+      dispatch(deleteFile(versionFile)).then(() => 
+        {dispatch(loadFiles())}
+    );
     });
-    dispatch(loadFiles());
-    dispatch(loadFiles());
     handleCloseContextMenu();
   };
 
-  const handleDownloadFile = () => {
-    // ...
+  const handleDownloadFile = async () => {
+    try {
+      const requestData = {
+        name: file.name,
+        version: file.version
+      };
+      const response = await axios.post('http://127.0.0.1:8000/files_versioning_api/v1/files/download', requestData, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+        responseType: 'arraybuffer', 
+      });
+  
+      const blob = new Blob([response.data], { type: response.headers['content-type'] });
+  
+      const downloadUrl = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.setAttribute('download', file.name);
+      document.body.appendChild(link);
+      link.click();
+      link.remove(); // Удаление ссылки после загрузки файла
+    } catch (error) {
+      console.error('Ошибка загрузки файла:', error);
+    }
     handleCloseContextMenu();
   };
+  
+  
 
   const isFileTypeMatch = (file, fileType) => {
     const fileExtension = file.name.split('.').pop().toLowerCase();

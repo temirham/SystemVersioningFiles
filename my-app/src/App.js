@@ -1,32 +1,33 @@
-import React from 'react';
-import FileManager from './components/FileManager';
-import LoginPage from './Pages/LoginPage';
+import './App.css';
 import { BrowserRouter, Route, Routes} from "react-router-dom";
+import UnauthorizedPage from "./Pages/UnauthorizedPage";
+import LoginPage from "./Pages/LoginPage";
+import RegisterPage from "./Pages/RegisterPage";
 import {Container} from "@mui/material";
+import FileManager from './components/FileManager';
+import FileUploadComponent from './components/FileUploadComponent';
 
 function App() {
   return (
-    // <BrowserRouter basename="/" >
-    //         <Container
-    //             maxWidth={false} disableGutters
-    //             // sx={{width:'100%',border:"2px solid gray"}}
+      // <DocumentTitle title={'Notes'}>
+        <BrowserRouter basename="/" >
+            <Container
+                maxWidth={false} disableGutters
 
-    //         >
+            >
 
-    //             {/*<MainTitle/>*/}
+                <Routes>
+                    <Route exact path={'/'} element={<UnauthorizedPage/>}/>
+                    <Route exact path={'/login'} element={<LoginPage/>}/>
+                    <Route exact path={'/register'} element={<RegisterPage/>}/>
+                    <Route exact path={'/main'} element={<FileManager/>}/>
+                    <Route exact path={'/test'} element={<FileUploadComponent/>}/>
+                </Routes>
 
-    //             <Routes>
-    //                 {/* <Route exact path={'/'} element={<UnauthorizedPage/>}/> */}
-    //                 <Route exact path={'/'} element={<LoginPage/>}/>
-    //                 {/* <Route exact path={'/register'} element={<RegisterPage/>}/> */}
-    //                 <Route exact path={'/main'} element={<FileManager/>}/>
-    //             </Routes>
-
-    //         </Container>
+            </Container>
 
 
-    //     </BrowserRouter>
-    <FileManager/>
+        </BrowserRouter>
   );
 }
 

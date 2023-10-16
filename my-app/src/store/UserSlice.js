@@ -14,7 +14,7 @@ export const addUser1 = createAsyncThunk(
             })
         };
         console.log(newUser)
-        const response = await axios.post(`${IP4}add_user`, requestOptions);
+        const response = await axios.post(`${IP4}profiles_api/v1/token/get`, requestOptions);
         return response.data
     }
 )
@@ -30,23 +30,21 @@ async function fetchJSON(url, options) {
 export const addUser = createAsyncThunk(
     'users/addUser',
     async (newUser) => {
-        return await fetchJSON(
-            `${IP4}add_user`,
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json;charset=utf-8',
-                },
-                body: JSON.stringify({
-                    username: newUser.username,
-                    password: newUser.password,
-                })
-            }
-        )
-            // .then(
-            //     (data) => data.json()
-            // )
 
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                username: newUser.username,
+                password: newUser.password,
+            })
+        };
+        console.log(newUser)
+        const response = await fetch(`${IP4}profiles_api/v1/signup`, requestOptions);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
     }
 )
 
@@ -56,7 +54,7 @@ export const authUser = createAsyncThunk(
     'users/authUser',
     async (user) => {
         return await fetchJSON(
-            `${IP4}api/token/obtain`,
+            `${IP4}profiles_api/v1/token/get`,
             {
                 method: 'POST',
                 headers: {
@@ -68,16 +66,13 @@ export const authUser = createAsyncThunk(
                 })
             }
         )
-            // .then(
-            //     (data) => data.json()
-            // )
     }
 )
 export const refreshUser = createAsyncThunk(
     'users/refreshUser',
     async () => {
         return await fetchJSON(
-        `${IP4}api/token/refresh`,
+        `${IP4}profiles_api/v1/token/refresh`,
         {
                 method: 'POST',
                 headers: {
@@ -92,25 +87,12 @@ export const refreshUser = createAsyncThunk(
     }
 )
 
-export const getUser = createAsyncThunk(
-    'users/getUser',
-    async () => {
-        const requestOptions = {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
-            }
-        };
-        const response = await axios.get(`${IP4}api/user`, requestOptions);
-        return response.data
-    }
-)
+
 
 
 export const userSlice = createSlice({
     name: "userSlice",
     initialState: {
-        userId:0,
         username:"",
         password:"",
         accessToken:"",
@@ -198,26 +180,6 @@ export const userSlice = createSlice({
                 state.userStatus = ErrorStatus
                 state.userError = action.error.message
             })
-            .addCase(getUser.pending, (state, action) => {
-                state.userStatus=LoadingStatus
-            })
-            .addCase(getUser.fulfilled, (state, action) => {
-                state.userId=action.payload.data.id
-                state.username=action.payload.data.username
-                state.userStatus = SuccessStatus
-                console.log(action.payload.data.id)
-                localStorage.setItem('userId',state.userId )
-                localStorage.setItem('username',state.username )
-            })
-            .addCase(getUser.rejected, (state, action) => {
-                state.userStatus = ErrorStatus
-                state.userError = action.error.message
-                state.userId=localStorage.getItem('userId')
-                state.username=localStorage.getItem('username')
-
-            })
-
-
     }
 
 })

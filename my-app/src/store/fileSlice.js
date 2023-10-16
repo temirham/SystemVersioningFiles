@@ -13,8 +13,14 @@ async function fetchJSON(url, options) {
 
 export const loadFiles = () => async (dispatch) => {
     try {
-      const response = await axios.get(`https://650a3278f6553137159c7e12.mockapi.io/uploadFile`); 
-      dispatch(setFile(response.data)); 
+      const requestOptions = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+    };
+      const response = await axios.get(`${IP4}files_versioning_api/v1/files`, requestOptions);
+      dispatch(setFile(response.data.data)); 
     } catch (error) {
     }
   };
@@ -60,61 +66,40 @@ export const addFile = createAsyncThunk(
 
 export const uploadFile = createAsyncThunk(
     'file/uploadFile',
-    async ({ file, userId }) => {
-      const formData = new FormData();
-      formData.append('user', userId);
-      formData.append('file', file);
-  
-      const requestOptions = {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
-        },
-      };
-  
-      const response = await axios.post(`${IP4}upload_file`, formData, requestOptions);
-      return response.data.data;
+    async (formData) => {
+      try {
+        const response = await axios.post(`${IP4}/files_versioning_api/v1/files/add`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+          },
+        });
+        console.log('File uploaded successfully', response);
+        return response.data.data
+      } catch (error) {
+        console.error('Error uploading file', error);
+      }
     }
   );
 
-// Замените Note на FileVersion
-export const editFile = createAsyncThunk(
-  'file/editFile',
-  async (file) => {
-    return await fetchJSON(
-      `${IP4}file/edit`,
-      {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json;charset=utf-8',
-          'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
-        },
-        body: JSON.stringify({
-          user: file.user,
-          newFileName: file.newFileName,
-          version: file.version,
-          content: file.content,
-          name: file.name,
-          date: file.date,
-        })
-      }
-    );
-  }
-);
+
+
 
 // Замените Note на FileVersion
 export const deleteFile = createAsyncThunk(
   'fileVersions/deleteFileVersion',
   async (file) => {
     return await fetchJSON(
-      `${IP4}/${file.ID}`,
+      `${IP4}files_versioning_api/v1/files/delete/version`,
       {
-        method: 'DELETE',
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json;charset=utf-8',
           'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
         },
         body: JSON.stringify({
           name: file.name,
+          version: file.version
         })
       }
     );
@@ -195,15 +180,6 @@ export const fileSlice = createSlice({
         state.fileStatus = SuccessStatus;
       })
       .addCase(addFile.rejected, (state, action) => {
-        state.fileStatus = LoadingStatus;
-      })
-      .addCase(editFile.pending, (state, action) => {
-        state.fileStatus = LoadingStatus;
-      })
-      .addCase(editFile.fulfilled, (state, action) => {
-        state.fileStatus = SuccessStatus;
-      })
-      .addCase(editFile.rejected, (state, action) => {
         state.fileStatus = LoadingStatus;
       })
       .addCase(deleteFile.pending, (state, action) => {

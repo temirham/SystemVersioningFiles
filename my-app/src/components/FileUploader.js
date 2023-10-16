@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Input, Paper, Typography } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile'; // Импортируем иконку файла
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 
-import { addFile, setCurrentFile, setFile, loadFiles} from '/Users/temirhanmamaev/Documents/test_front/my-app/src/store/fileSlice.js';
-
+import { addFile, loadFiles, uploadFile} from '/Users/temirhanmamaev/Documents/test_front/my-app/src/store/fileSlice.js';
+import axios from 'axios';
 import {useDispatch, useSelector} from "react-redux";
 
 function countFileRepetitions(files, fileName) {
@@ -22,13 +22,12 @@ function countFileRepetitions(files, fileName) {
 
 
 
-function FileUploader({ onFileUpload }) {
+function FileUploader() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [isDialogOpen, setDialogOpen] = useState(false);
   const {files} = useSelector((state) => state.files); 
   const dispatch = useDispatch();
 //   const {userId} = useSelector((state) => state.userId);
-  const userId = 3;
   
 
   const openDialog = () => {
@@ -41,18 +40,16 @@ function FileUploader({ onFileUpload }) {
   };
 
   const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    setSelectedFile(file);
+    setSelectedFile(e.target.files[0]);
   };
 
   const handleUpload = () => {
     if (selectedFile) {
-        const repetitions = countFileRepetitions(files, selectedFile.name);
-        selectedFile.version = repetitions + 1;
-        console.log(selectedFile.version);
-        dispatch(addFile(selectedFile, repetitions));
-        dispatch(loadFiles());
-        dispatch(loadFiles());
+        const formData = new FormData();
+        formData.append('file', selectedFile);
+        dispatch(uploadFile(formData)).then(() => 
+          {dispatch(loadFiles())}
+        );
         closeDialog()
       }
   };
