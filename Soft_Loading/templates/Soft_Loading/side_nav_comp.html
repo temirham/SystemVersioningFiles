@@ -1,0 +1,26 @@
+{% load static %}
+{% load replace_filter%}
+
+<div class = "sidenav">
+    {% if categories_dict != None %}
+        <div class = "sidenav_title"><h3>Категории</h3></div>
+    {% endif%}
+
+    {% for main_cat, sub_cat_list in categories_dict.items %}
+        <div class="cat_group">
+            <div class="main_cat_brick">                                    <!--no new line!-->
+                <a class="side_nav_main_a" href="{%url 'soft_loading:sl_filter' language %}{{main_cat|replace:' |_'}}">{{main_cat}}</a>
+                <img class="visible plus" src="{% static 'Soft_Loading/src/plus.svg'%}">
+                <img class="visible minus" src="{% static 'Soft_Loading/src/minus.svg'%}">
+            </div>
+
+            <div class="sub_cat_group">
+                {% for sub_cat in sub_cat_list %}
+                    <div class = "sub_cat_brick" >
+                        <a href="{%url 'soft_loading:sl_filter' language%}{{main_cat|replace:' |_'}}/{{sub_cat|replace:' |_'}}">{{sub_cat}}</a>
+                    </div>
+                {% endfor%}
+            </div>
+        </div>
+    {% endfor%}
+</div>

@@ -1,0 +1,48 @@
+{% extends 'Soft_Loading/index.html' %}
+{% load static%}
+{% load replace_filter%}
+
+{% block soft%}
+<div class="program">
+    <div class="header">
+        <img class="soft" src = "{{ soft.image }}">
+        <div class="description">
+            <div class="rate"></div>
+                <h1>{{ soft.name }}</h1>
+                <div class="info">
+                    <p class="license">Лицензия: <span> {{soft.status }}</span></p>
+                    <p class="downloads"> 11580 скачиваний</p>
+                </div>
+            <div class="platforms">
+                {% for platform in soft.platforms %}
+                    <p>{{ platform.name }}</p>
+<!--                    <img class="plantf_icon" src = {static soft.platfom.}>-->
+                {% endfor%}
+            </div>
+            {% if target_file != ''%}
+                <a class="download" href="{% url 'soft_loading:download' target_file.file_id %}">Download</a>
+            {% endif%}
+        </div>
+    </div>
+
+    <div class ="about">
+        <div class="navbar">
+        </div>
+        <div class="characteristics">
+        </div>
+        <div class="description">
+
+        </div>
+        <div class="versions">
+            {% for file in files%}
+                <a class = "file" href="{% url 'soft_loading:download' file.id%}">
+                    <p>Скачать {{soft.name|replace:' |_'}}_{{file.version}}_{{file.architecture}} для {{file.compatibility}}</p>
+                    <p>{{file.size}}</p></a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{%endblock%}
+
+
+

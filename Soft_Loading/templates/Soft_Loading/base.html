@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link  rel="icon" href = "{% static 'Soft_Loading/src/icon.svg' %}">
+    <link rel="stylesheet" href="{% static 'Soft_Loading/css/global.css' %}">
+    <link rel="stylesheet" href="{% static 'Soft_Loading/css/standart_elements.css' %}">
+
+    <link rel="stylesheet" href="{% static 'Soft_Loading/css/header_nav.css' %}">
+    <link rel="stylesheet" href="{% static 'Soft_Loading/css/side_nav.css' %}">
+    <link rel="stylesheet" href="{% static 'Soft_Loading/css/board.css' %}">
+    <link rel="stylesheet" href="{% static 'Soft_Loading/css/soft.css' %}">
+    <meta name="viewport" content='device-width' />
+    <script defer type="application/javascript" src ="{% static 'Soft_Loading/js/side_nav_interface.js' %}"></script>
+    <script defer type="application/javascript" src ="{% static 'Soft_Loading/js/save_params.js' %}"></script>
+    <script defer type="application/javascript" src ="{% static 'Soft_Loading/js/search.js' %}"></script>
+<!--    <script type="application/javascript" src="http://code.jquery.com/jquery-latest.js"></script>-->
+    {% block head%} {% endblock %}
+</head>
+
+<body>
+    {% include 'Soft_Loading/static_html/header.html'  %}
+    {% include 'Soft_Loading/side_nav_comp.html' %}
+<!--    {% include 'Soft_Loading/path_comp.html' %}-->
+
+    {% block body %} {% endblock %}
+</body>
+
+<footer>
+    {% include 'Soft_Loading/static_html/Footer.html'  %}
+</footer>
+</html>

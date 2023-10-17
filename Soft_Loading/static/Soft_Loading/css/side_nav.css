@@ -1,0 +1,94 @@
+.sidenav_title {
+    width: 100%;
+    text-align: center;
+}
+
+.sidenav_title h3{
+    margin-right: 15px;
+    font-size: 16px;
+    font-weight: 700;
+    color: black;
+}
+
+.sidenav {
+    height: 85%;
+
+    flex: 20% 0 0;
+
+    display: flex;
+    flex-direction: column;
+    float: left;
+
+    margin-top: 60px;
+    margin-left: 20px;
+    color: #fff;
+}
+
+.main_cat_brick a {
+    display: inline-block;
+    flex-grow: 1;
+    margin: 10px;
+    font-weight: normal;
+}
+
+.main_cat_brick, .sub_cat_brick {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+
+    margin-left: 5px;
+    margin-right: 8px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+
+    padding: 5px 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-decoration: none;
+
+    background: #fff;
+    color: black;
+    border-radius: 3px;
+    box-shadow: 0 0 2px rgba(0,0,0,.2);
+}
+
+.sub_cat_brick a, .main_cat_brick a {
+    width: 100%;
+    height: 100%;
+    padding: 4px;
+    text-decoration: none;
+    color: black;
+}
+
+.main_cat_brick:hover {
+    box-shadow: 0 2px 15px rgba(0,0,0,.14);
+    transition: all .3s;
+}
+
+.sub_cat_brick:hover {
+    background-color:  #fd6f29;
+    box-shadow: 0 2px 15px rgba(0,0,0,.4);
+    transition: 0.1s;
+}
+
+.sub_cat_brick:hover a {
+    color: white;
+    transition: 0.1s;
+}
+
+.main_cat_brick img {
+    margin: 0px;
+    padding: 0px;
+    display: inline-block;
+}
+
+.main_cat_brick img.minus {
+    display: none;
+}
+
+.sub_cat_group {
+    display: none;
+ }

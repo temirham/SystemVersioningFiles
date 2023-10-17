@@ -1,0 +1,51 @@
+form.s_form {
+    width: 350px;
+    margin: auto;
+    padding: 25px;
+
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0px 0px 10px 0px #ccc;
+}
+
+form.s_form h2, a.problem{
+    margin-bottom: 20px;
+    text-align: center; /* a.problem - for resetting pass*/
+}
+
+form.s_form label {
+    display: block;
+    text-align: left;
+}
+
+form.s_form input {
+    width: calc(100% - 20px);
+    margin-bottom: 20px;
+}
+
+form.s_form .buttons{
+    display: flex;
+    justify-content:flex-end;
+}
+
+form.s_form button#submit {
+    margin-right: 10px;
+}
+form.s_form button#cansel {
+    margin-left: 10px;
+}
+
+form.s_form a.problem {
+    display: block;
+    margin-top: 20px;
+    margin-bottom: 0;
+    text-decoration: none;
+}
+
+form.s_form {
+    margin-top: 10%;
+}
+
+form.register_form {
+    margin-top: 9%;
+}

@@ -1,0 +1,130 @@
+.board {
+    width: 100%;
+    height: auto;
+    float: right;
+    margin-top: 113px;
+    padding: 20px;
+
+    box-shadow: 0 0 2px rgba(0,0,0,.2);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: normal;
+
+}
+
+/*Добавить align-self: flex-start чтобы при раскрытии описания карточки нормально себя вели
+(добавить возможность развернуть описание в етории)*/
+.card {
+    width: 25%;
+    height: 25vw;
+    max-width: 200px;
+    max-height: 240px;
+
+    min-width: 40px;
+    min-height: 120px;
+
+    margin: 4px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    cursor: pointer;
+    border-radius: 10px;
+    text-align: center;
+
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.card .download {
+    width: 70%;
+    height: 15%;
+    margin-bottom: 10px;
+    max-height: 25px;
+    display: flex;
+    float: bottom;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    border-radius: 16px;
+    border: 1px solid #63b94d;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+
+    color: #63b94d;
+    transition: background-color .3s ease;
+}
+
+.card:hover {
+    transition: transform 0.3s ease-out;
+    transform: scale(1.1);
+}
+
+.card:hover .download {
+    background-color: #63b94d;
+    color: white;
+    border: 1px solid white;
+    transition:  0.3s ease-out;
+}
+
+.card .download:hover img {
+    filter: brightness(0) invert(100%);
+}
+
+.card p.title {
+    line-height: 20px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+.card img.soft {
+    max-height: 115px;
+    display: inline-block;
+    border-radius: 10px;
+}
+
+
+/*УБРАТЬ ПОТОМ*/
+.board form {
+    width: 100%
+}
+
+.board form#ammount .submit {
+    margin-left: 5px;
+}
+
+.board form#ammount .input  {
+    width: 100px;
+    outline: none;
+}
+
+.board form#ammount span {
+    margin-right: 5px;
+}
+
+.card form button {
+    padding: 5px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    float: bottom;
+    flex-grow: 1;
+    background-color: #fd6f29;
+    color: #fff;
+}
+
+.card form button:hover {
+    background-color: #fff;
+    color: #f00;
+}
+
+.card form input {
+    display: none;
+}
+/* до сюда */

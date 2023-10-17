@@ -1,0 +1,41 @@
+{% extends 'Soft_Loading/base.html' %}
+{% load static%}
+{% load replace_filter%}
+{% load el_pagination_tags %}
+
+{% block head %}
+    <title>Soft_Loading</title>
+{% endblock %}
+
+{% block body %}
+<div class="board">
+<!--    {% if kostil != False%} &lt;!&ndash;УБРАТЬ ПОТОМ &ndash;&gt;-->
+<!--        <form id="ammount" method="post">-->
+<!--            {% csrf_token %}-->
+<!--            <label><span>Введите число отображаемых записей:</span></label>-->
+<!--            <input class="input" name="ammount" type="text">-->
+<!--            <input class="submit" type="submit" value="Submit" >-->
+<!--        </form>-->
+<!--    {% endif%}-->
+
+    {% for soft in soft_list %}
+        <div class="card" onclick="location='{% url 'soft_loading:soft' language soft.main_cat soft.sub_cat soft.id %}';">
+            <img class="soft" src = "{{ soft.image }}" onerror="this.src='{% static 'soft_loading/src/placeholder.jpg' %}'">
+            <p class="title">{{ soft.name }}</p>
+            <p class="license">Лицензия: <span>{{ soft.status }}</span></p>
+
+            <div class="download">
+                <img src="{% static 'soft_loading/src/download.svg' %}">
+                <pre> Скачать</pre>
+            </div>
+<!--            <form method="post">-->
+<!--                {% csrf_token %}-->
+<!--                <input name="delete" value="{{ soft.id }}">-->
+<!--                <button type="submit" class="delete">delete</button>-->
+<!--            </form>-->
+        </div>
+    {% endfor %}
+
+    {% block soft%}{% endblock %}
+</div>
+{% endblock %}

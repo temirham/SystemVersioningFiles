@@ -1,0 +1,19 @@
+.path h4 {
+    margin-top: 80px;
+    padding: 0 20px;
+    float: left;
+}
+
+.path li + li::before {
+    color: #ccc;
+    content: "/ ";
+    padding: 0 5px;
+}
+
+.path li {
+    display: inline-block;
+}
+
+.path ~ a {
+    text-decoration: none;
+}

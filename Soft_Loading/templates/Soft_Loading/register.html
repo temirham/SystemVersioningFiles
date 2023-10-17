@@ -1,0 +1,25 @@
+{% extends 'Soft_Loading/base.html' %}
+{% load static%}
+
+{% block head %}
+    <title>Register</title>
+    <link rel="stylesheet" href="{% static 'Soft_Loading/css/forms.css' %}">
+{% endblock %}
+
+{% block body %}
+<form class = "s_form register_form">
+    <h2>Registration</h2>
+    <label>Username</label>
+    <input class = "s_input" type = "text" id = "username" name = "username" required>
+    <label>E-mail</label>
+    <input class = "s_input" type = "text" id = "email" name = "email" required>
+    <label>Password:</label>
+    <input class = "s_input" type = "password" id="password_f" name = "password_f" required>
+    <label>Repeat password:</label>
+    <input class = "s_input" type = "password" id="password_s" name = "password_s" required>
+    <div class = buttons>
+        <button class = "s_button" id = "submit">Register</button>
+        <button class = "s_button" id = "cansel">Cansel</button>
+    </div>
+</form>
+{% endblock %}

@@ -1,0 +1,20 @@
+{%load static%}
+<div id="header_navbar" class="navbar_search">
+    <div class="navbar_cases">
+        <a class="home" href="{% url 'soft_loading:sl_filter' language%}"> ★ HOME ★ </a>
+        <a href="?plantf=windows" > WINDOWS </a>
+        <a href="?plantf=linux"> LINUX </a>
+        <a href="?plantf=mac"> MAC OS </a>
+        <a href="?plantf=ios"> IOS </a>
+        <a href="?plantf=android"> ANDROID </a>
+        <a href="?plantf=other"> ДРУГОЕ </a>
+    </div>
+
+    <input class ="navbar_search" name="search" type="text" placeholder="Поиск... " >
+    <img class="lupe"  src="{% static 'soft_loading/src/lupe.svg' %}">
+    <div class="navbar_login">
+        <a class="s_link" href="{% url 'soft_loading:sl_login' language%}">Войти</a>
+        <span class="line">|</span>
+        <a class="s_link" href="{% url 'soft_loading:sl_register' language%}">Регистрация</a>
+    </div>
+</div>
