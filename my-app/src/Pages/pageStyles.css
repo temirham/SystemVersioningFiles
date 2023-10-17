@@ -1,0 +1,15 @@
+@keyframes pulse {
+    0% {
+        background-color: #d8e5ff;
+    }
+    50% {
+        background-color: #c6d4ff;
+    }
+    100% {
+        background-color: #d8e5ff;
+    }
+  }
+  
+  .background-animation {
+    animation: pulse 5s linear infinite;
+  }

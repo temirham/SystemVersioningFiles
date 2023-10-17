@@ -4,7 +4,7 @@ import UnauthorizedPage from "./Pages/UnauthorizedPage";
 import LoginPage from "./Pages/LoginPage";
 import RegisterPage from "./Pages/RegisterPage";
 import {Container} from "@mui/material";
-import FileManager from './components/FileManager';
+import MainPage from './Pages/MainPage';
 
 function App() {
   return (
@@ -19,7 +19,7 @@ function App() {
                     <Route exact path={'/'} element={<UnauthorizedPage/>}/>
                     <Route exact path={'/login'} element={<LoginPage/>}/>
                     <Route exact path={'/register'} element={<RegisterPage/>}/>
-                    <Route exact path={'/main'} element={<FileManager/>}/>
+                    <Route exact path={'/main'} element={<MainPage/>}/>
                 </Routes>
 
             </Container>
