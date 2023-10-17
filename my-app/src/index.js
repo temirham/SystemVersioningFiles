@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import { Provider } from 'react-redux';
-import store from '/Users/temirhanmamaev/Documents/test_front/my-app/src/store/store.js'; 
+import store from '/Users/temirhanmamaev/Documents/SystemVersioningFiles/my-app/src/store/store.js'; 
 import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
 import App from './App';
 

@@ -3,21 +3,10 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Input, Paper
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 
-import { addFile, loadFiles, uploadFile} from '/Users/temirhanmamaev/Documents/test_front/my-app/src/store/fileSlice.js';
-import axios from 'axios';
-import {useDispatch, useSelector} from "react-redux";
+import { loadFiles, uploadFile} from '/Users/temirhanmamaev/Documents/SystemVersioningFiles/my-app/src/store/fileSlice.js';
+import {useDispatch} from "react-redux";
 
-function countFileRepetitions(files, fileName) {
-  let maxVersion = 0;
 
-  files.forEach((file) => {
-    if (file.name === fileName && file.version > maxVersion) {
-      maxVersion = file.version;
-    }
-  });
-
-  return maxVersion;
-}
 
 
 
@@ -25,7 +14,6 @@ function countFileRepetitions(files, fileName) {
 function FileUploader() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [isDialogOpen, setDialogOpen] = useState(false);
-  const {files} = useSelector((state) => state.files); 
   const dispatch = useDispatch();
 //   const {userId} = useSelector((state) => state.userId);
   

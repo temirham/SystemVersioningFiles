@@ -1,9 +1,9 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import FileUploader from './FileUploader';
-import {useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import FileCard from './FileCard';
-import { uploadFile } from '/Users/temirhanmamaev/Documents/test_front/my-app/src/store/fileSlice.js';
 import TextField from '@mui/material/TextField';
+import { useNavigate } from 'react-router-dom'; 
 import {
   Button,
   Typography,
@@ -24,31 +24,31 @@ import ImageIcon from '@mui/icons-material/Image';
 import DescriptionIcon from '@mui/icons-material/Description';
 import FolderIcon from '@mui/icons-material/Folder';
 import MenuIcon from '@mui/icons-material/Menu';
+import PersonIcon from '@mui/icons-material/Person';
 import { loadFiles } from '../store/fileSlice';
-import { refreshUser } from '../store/UserSlice';
+import { refreshUser, logoutUser } from '../store/UserSlice';
 
-
-  
 
 function FileManager() {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
-  const [selectedMenu, setSelectedMenu] = useState('mydrive'); 
+  const [selectedMenu, setSelectedMenu] = useState('mydrive');
   const [searchText, setSearchText] = useState('');
+  const navigate = useNavigate();
 
   const handleMenuClick = (menu) => {
     setSelectedMenu(menu);
   };
   const dispatch = useDispatch();
-  const {files} = useSelector((state) => state.files); 
+  const { files } = useSelector((state) => state.files);
 
-  
   useEffect(() => {
     const fetchData = async () => {
-        await dispatch(loadFiles());
-        await dispatch(refreshUser())
+      await dispatch(loadFiles());
+      await dispatch(refreshUser());
     }
-    fetchData()
-  }, [])
+    fetchData();
+  }, []);
+
   const filterFiles = () => {
     const filteredFiles = files.reduce((result, currentFile) => {
       const existingFile = result.find((file) => file.name === currentFile.name);
@@ -57,18 +57,27 @@ function FileManager() {
       }
       return result;
     }, []);
-  
+
     return filteredFiles.filter((file) => {
       return file.name.toLowerCase().includes(searchText.toLowerCase());
     });
   };
+
   const handleSearchChange = (event) => {
     setSearchText(event.target.value);
   };
-  
+
+  const handleExit = () => {
+    dispatch(logoutUser()).then(() => 
+      {
+        navigate('/')
+        localStorage.clear();
+      }
+    );
+  };
 
   return (
-    <Container style={{alignContent: 'center', marginLeft: 'auto', marginRight: 'auto', marginTop: 'auto'}}>
+    <Container style={{ alignContent: 'center', marginLeft: 'auto', marginRight: 'auto', marginTop: 'auto' }}>
       <Grid width={'75vw'} marginTop={10}>
         <Grid item xs={12} md={2}>
           <Drawer
@@ -85,19 +94,13 @@ function FileManager() {
               }}
             >
               <Button
-                startIcon={<MenuIcon />}
-                onClick={() => setDrawerOpen(false)}
+                startIcon={<PersonIcon />}
+                onClick={handleExit}
               >
-                Close Menu
+                Выйти
               </Button>
               <Divider />
               <List>
-              {/* <ListItem button onClick={handleOpenAuthDialog}>
-                  <ListItemIcon>
-                    <AccountCircleIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Login" />
-                </ListItem> */}
                 <ListItem
                   button
                   selected={selectedMenu === 'mydrive'}
@@ -149,11 +152,11 @@ function FileManager() {
         <Grid item xs={12} md={10}>
           <AppBar position="static" color="default">
             <Toolbar>
-              <Grid  style={{display: 'flex', justifyContent: 'space-between', width: '100%'}}>
-                <div style={{flexGrow: 1}}>
-                    <Typography variant="h6" color="inherit" marginLeft={1} marginTop={1}>
+              <Grid style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                <div style={{ flexGrow: 1 }}>
+                  <Typography variant="h6" color="inherit" marginLeft={1} marginTop={1}>
                     File Manager
-                </Typography>
+                  </Typography>
                   <Button
                     startIcon={<MenuIcon />}
                     onClick={() => setDrawerOpen(true)}
@@ -167,18 +170,18 @@ function FileManager() {
                   fullWidth
                   value={searchText}
                   onChange={handleSearchChange}
-                  style={{width: '300px', marginTop: '10px', zIndex: 1}}
+                  style={{ width: '300px', marginTop: '10px', zIndex: 1 }}
                 />
               </Grid>
             </Toolbar>
           </AppBar>
           <Paper elevation={10} style={{ padding: '20px' }}>
-          {!files.length ? <h1>К сожалению, пока ничего не найдено</h1>:
-            <Grid container spacing={-2}>
+            {!files.length ? <h1>К сожалению, пока ничего не найдено</h1> :
+              <Grid container spacing={-2}>
                 {filterFiles().map((file, index) => ( // Фильтруем уникальные файлы по имени
                   <FileCard key={index} file={file} selectedMenu={selectedMenu} />
                 ))}
-            </Grid>
+              </Grid>
             }
           </Paper>
         </Grid>

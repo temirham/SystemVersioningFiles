@@ -8,7 +8,7 @@ import filePdf from '@iconify-icons/fa-regular/file-pdf';
 import fileWord from '@iconify-icons/fa-regular/file-word';
 import fileExcl from '@iconify-icons/fa-regular/file-excel';
 import filePpt from '@iconify-icons/fa-regular/file-powerpoint';
-import { deleteFile, downloadFile, loadFiles } from '/Users/temirhanmamaev/Documents/test_front/my-app/src/store/fileSlice.js';
+import { deleteFile, loadFiles } from '../store/fileSlice.js';
 import { useDispatch } from "react-redux";
 import axios from 'axios';
 
@@ -92,11 +92,11 @@ function FileCard({ file, selectedMenu }) {
     handleCloseContextMenu();
   };
 
-  const handleDownloadFile = async () => {
+  const handleDownloadFile = async (selectedFile) => {
     try {
       const requestData = {
-        name: file.name,
-        version: file.version
+        name: selectedFile.name,
+        version: selectedFile.version
       };
       const response = await axios.post('http://127.0.0.1:8000/files_versioning_api/v1/files/download', requestData, {
         headers: {
@@ -111,15 +111,16 @@ function FileCard({ file, selectedMenu }) {
       const downloadUrl = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = downloadUrl;
-      link.setAttribute('download', file.name);
+      link.setAttribute('download', selectedFile.name);
       document.body.appendChild(link);
       link.click();
-      link.remove(); // Удаление ссылки после загрузки файла
+      link.remove(); 
     } catch (error) {
       console.error('Ошибка загрузки файла:', error);
     }
     handleCloseContextMenu();
   };
+  
   
   
 
@@ -160,7 +161,7 @@ function FileCard({ file, selectedMenu }) {
         onClose={handleCloseContextMenu}
       >
         <MenuItem onClick={handleDeleteFile}>Удалить</MenuItem>
-        <MenuItem onClick={handleDownloadFile}>Скачать</MenuItem>
+        <MenuItem onClick={() => handleDownloadFile(file)}>Скачать</MenuItem>
         <MenuItem onClick={openVersionsDialog}>Показать все версии файла</MenuItem>
       </Menu>
       <Dialog open={isVersionsDialogOpen} onClose={closeVersionsDialog}>
@@ -182,7 +183,7 @@ function FileCard({ file, selectedMenu }) {
                     onClose={handleCloseContextMenu1}
                   >
                     <MenuItem onClick={() => handleDeleteVersion(versionFile)}>Удалить</MenuItem>
-                    <MenuItem onClick={handleDownloadFile}>Скачать</MenuItem>
+                    <MenuItem onClick={() => handleDownloadFile(versionFile)}>Скачать</MenuItem>
                   </Menu>
                 </ListItem>
               ))}

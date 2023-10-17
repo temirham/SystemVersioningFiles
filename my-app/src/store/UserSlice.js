@@ -87,7 +87,24 @@ export const refreshUser = createAsyncThunk(
     }
 )
 
-
+export const logoutUser = createAsyncThunk(
+    'users/refreshUser',
+    async () => {
+        return await fetchJSON(
+        `${IP4}profiles_api/v1/token/logout`,
+        {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8',
+                },
+                body: JSON.stringify({
+                    refresh: localStorage.getItem('refreshToken'),
+                })
+            }
+        )
+            // .then((data) => data.json())
+    }
+)
 
 
 export const userSlice = createSlice({
