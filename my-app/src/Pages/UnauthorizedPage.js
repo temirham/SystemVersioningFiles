@@ -20,7 +20,7 @@ function UnauthorizedPage() {
             <Typography variant={'h4'} align={'center'} paragraph
             sx={{fontFamily:"NunitoSansExtraLightFont", color:"text.text2"}}
             >
-                Приветствуем Вас на сервисе облачных заметок!
+                Приветствуем Вас на сервисе версионирования файлов!
             </Typography>
             <Button variant={"contained"} align={'center'} onClick={handleClick}
             sx={{backgroundColor:'secondary.button', fontFamily:'GenshinFont', margin: '50px 30px', padding: '20px 100px', borderRadius: '26px'}}

@@ -98,6 +98,7 @@ function FileCard({ file, selectedMenu }) {
         name: selectedFile.name,
         version: selectedFile.version
       };
+      console.log(selectedFile.name)
       const response = await axios.post('http://127.0.0.1:8000/files_versioning_api/v1/files/download', requestData, {
         headers: {
           'Content-Type': 'application/json',
@@ -111,7 +112,7 @@ function FileCard({ file, selectedMenu }) {
       const downloadUrl = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = downloadUrl;
-      link.setAttribute('download', selectedFile.name);
+      link.setAttribute('download', selectedFile.name.replace(/\$/g, '_'));
       document.body.appendChild(link);
       link.click();
       link.remove(); 
@@ -152,7 +153,7 @@ function FileCard({ file, selectedMenu }) {
         {getFileIcon(file.name.split('.').pop())}
       </div>
       <div >
-        <Typography variant="subtitle3" style={{ fontSize: '13px' }}>{file.name}</Typography>
+        <Typography variant="subtitle3" style={{ fontSize: '13px' }}>{file.name.replace(/\$/g, '_')}</Typography>
         <Typography variant="subtitle1">version: {file.version}</Typography>
       </div>
       <Menu

@@ -33,14 +33,18 @@ function FileUploader() {
 
   const handleUpload = () => {
     if (selectedFile) {
+        const newFileName = selectedFile.name.replace(/_/g, '$');
+        const newFile = new File([selectedFile], newFileName, { type: selectedFile.type });
+
         const formData = new FormData();
-        formData.append('file', selectedFile);
+        formData.append('file', newFile);
         dispatch(uploadFile(formData)).then(() => 
           {dispatch(loadFiles())}
         );
         closeDialog()
-      }
-  };
+    }
+};
+
 
   const handleDragOver = (e) => {
     e.preventDefault();

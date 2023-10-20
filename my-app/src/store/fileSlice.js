@@ -110,13 +110,6 @@ export const fileSlice = createSlice({
   name: "fileSlice",
   initialState: {
     files: [],
-    fileStatus: '',
-    currentFile: {
-      fileName: '',
-      version: 0,
-      path: '',
-      date: '',
-    },
     deletingFile: {
       fileName: '',
       version: 0,
