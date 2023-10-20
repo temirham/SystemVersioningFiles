@@ -166,7 +166,7 @@ function FileCard({ file, selectedMenu }) {
         <MenuItem onClick={openVersionsDialog}>Показать все версии файла</MenuItem>
       </Menu>
       <Dialog open={isVersionsDialogOpen} onClose={closeVersionsDialog}>
-        <DialogTitle>Версии файла: {file.name}</DialogTitle>
+        <DialogTitle>Версии файла: {file.name.replace(/\$/g, '_')}</DialogTitle>
         <DialogContent>
           <List>
             {files
